@@ -40,6 +40,7 @@ public class LoginPOM {
     @FindBy(className = "error-button")
     WebElement errorButton;
     public void loginError(){
+
         errorButton.isDisplayed();
     }
 

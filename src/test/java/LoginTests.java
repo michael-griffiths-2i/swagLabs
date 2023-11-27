@@ -6,9 +6,11 @@ import utilities.TestBase;
 public class LoginTests extends TestBase {
 
     private LoginPOM login;
+    private BagPOM bag;
 
     @Test
-    void standard_user() {
+    public void standard_user() {
+        System.out.println("Running standard user");
         login = new LoginPOM(driver);
 
         //input the username : standard_user & pwd secret_sauce
@@ -20,6 +22,7 @@ public class LoginTests extends TestBase {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        System.out.println("Finished standard user");
 
     }
 
@@ -38,8 +41,81 @@ public class LoginTests extends TestBase {
         }
     }
 
+    @Test
+    void standard_user_logout() {
+        login = new LoginPOM(driver);
+        standard_user();
+        login.burgerButtonClick();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        login.logoutButtonClick();
 
 
 
-}//end of HelloWebDriver
+    }
+    @Test
+    void nearlybuyAbag(){
+        bag = new BagPOM(driver); // Initialize the bag object
+        //add to cart button
+        standard_user();
+        bag.addToCart();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        //shopping cart badge should have value of 1
+        bag.checkCartBadge();
+
+        //click on cart
+        bag.clickOnCart();
+        //check value
+        bag.checkPrice();
+        //remove
+        bag.removeFromCart();
+
+    }
+
+    @Test
+    void buyAbag(){
+        bag = new BagPOM(driver); // Initialize the bag object
+        //add to cart button
+        standard_user();
+        bag.addToCart();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        //shopping cart badge should have value of 1
+        bag.checkCartBadge();
+
+        //click on cart
+        bag.clickOnCart();
+        //check value
+        bag.checkPrice();
+        //checkout
+        bag.clickCheckoutButton();
+        //enter details Michael Mouse
+        bag.addFirstName();
+        bag.addLastName();
+        bag.addPostCode();
+        bag.clickContinue();
+        //check tax
+        bag.checkTax();
+        //check price
+        bag.checkFinalPrice();
+        //finish
+        bag.clickFinishButton();
+        //check order message
+        bag.checkOrderMessage();
+
+    }
+
+}
 
