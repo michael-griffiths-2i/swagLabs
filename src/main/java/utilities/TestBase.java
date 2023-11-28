@@ -13,16 +13,19 @@ public class TestBase {
     //set up the baseUrl which should be protected
     protected String baseUrl ="https://www.saucedemo.com";
 
-    //setUp BeforeEach
+    // 'setUp' is a function that runs before each test
     @BeforeEach
-    void setUp(){
+    void setUp() {
 
-        driver = new ChromeDriver();
-        driver.get(baseUrl);
-        login = new LoginPOM(driver);
+        // We're setting up our remote to be the Chrome remote
+        this.driver = new ChromeDriver();
+
+        // We're telling our remote to go to our test website
+        this.driver.get(this.baseUrl);
+
     }
 
-    //setUp AfterEach
+    // 'tearDown' is a function that runs before each test
     @AfterEach
     void tearDown(){
 
