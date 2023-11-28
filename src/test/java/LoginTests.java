@@ -117,5 +117,29 @@ public class LoginTests extends TestBase {
 
     }
 
+    @Test
+    void nearlybuyAProduct(){
+        bag = new BagPOM(driver); // Initialize the bag object
+        //add to cart button
+        standard_user();
+        bag.addToCart();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        //shopping cart badge should have value of 1
+        bag.checkCartBadge();
+
+        //click on cart
+        bag.clickOnCart();
+        //check value
+        bag.checkPrice();
+        //remove
+        bag.removeFromCart();
+
+    }
+
 }
 
