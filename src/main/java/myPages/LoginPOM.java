@@ -1,8 +1,16 @@
 package myPages;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 
 public class LoginPOM {
@@ -12,7 +20,7 @@ public class LoginPOM {
     //constructor
     public LoginPOM(WebDriver driver) {
         this.driver = driver;
-        PageFactory.initElements(driver, this); //stop forgetting this!!!
+        PageFactory.initElements(driver, this);
     }
 
     //Locators
@@ -40,8 +48,9 @@ public class LoginPOM {
     @FindBy(className = "error-button")
     WebElement errorButton;
     public void loginError(){
-
-        errorButton.isDisplayed();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3)); // wait up to 10 seconds
+        wait.until(ExpectedConditions.visibilityOf(errorButton));
+        assertThat(errorButton.isDisplayed(),is(true));
     }
 
     @FindBy(id="react-burger-menu-btn")
@@ -51,9 +60,14 @@ public class LoginPOM {
     }
     @FindBy(linkText = "Logout")
     WebElement logoutButton;
+
+    @FindBy(id="login-button")
+    WebElement loginButton;
+
     public void logoutButtonClick(){
         logoutButton.click();
-        Login.isDisplayed();
+        // Hamcrest assertion to check that the login element is displayed
+        assertThat(loginButton.isDisplayed(), is(true));
     }
 
 }

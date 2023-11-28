@@ -3,6 +3,14 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 
 
 public class BagPOM {
@@ -21,6 +29,7 @@ public class BagPOM {
     @FindBy (id = "add-to-cart-sauce-labs-backpack")
     WebElement AddToCart;
     public void addToCart() {
+
         AddToCart.click();
 
     }
@@ -30,13 +39,11 @@ public class BagPOM {
     //shopping cart badge should have value of 1
     @FindBy(className="shopping_cart_badge")
     WebElement badgeValue;
-    public boolean checkCartBadge() {
+    public void checkCartBadge() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3)); // wait up to 10 seconds
+        wait.until(ExpectedConditions.visibilityOf(badgeValue));
         String spanText = badgeValue.getText();
-        if (spanText=="1"){
-            System.out.println("Badge value is 1");
-            return true;
-        }
-        else return false;
+        assertThat(spanText, is("1"));
     }
     //click on cart
     @FindBy(className="shopping_cart_link")
@@ -48,16 +55,11 @@ public class BagPOM {
 
     @FindBy(className = "inventory_item_price")
     WebElement itemPrice;
-    public boolean checkPrice() {
+    public void checkPrice() {
         //check value
         String spanText = itemPrice.getText();
-        if(spanText=="$29.99"){
-            System.out.println("Item value is $29.99");
-            return true;
-        }
-        else{
-            return false;
-        }
+        assertThat(spanText, is("$29.99"));
+
     }
     //buttonclass.linktext should have Remove
     @FindBy(name = "remove-sauce-labs-backpack")
@@ -96,23 +98,20 @@ public class BagPOM {
     public void clickContinue() {
         continueButton.click();
     }
-    @FindBy(className = "summary_subtotal_label")
+    @FindBy(className = "summary_tax_label")
     WebElement taxContent;
-    public boolean checkTax() {
+    public void checkTax() {
         String myTax=taxContent.getText();
-        if(myTax=="Tax: $2.40"){
-            return true;
-        }
-        else return false;
+        assertThat(myTax, is("Tax: $2.40"));
+
     }
 
     @FindBy(className = "summary_total_label")
     WebElement totalContent;
-    public boolean checkFinalPrice() {
-        if(totalContent.getText()=="Total: $32.39"){
-            return true;
-        }
-        else return false;
+    public void checkFinalPrice() {
+
+        assertThat(totalContent.getText(), is("Total: $32.39"));
+
     }
 
     @FindBy(id="finish")
@@ -123,11 +122,8 @@ public class BagPOM {
 
     @FindBy(className="complete-header")
     WebElement thanksOrder;
-    public boolean checkOrderMessage() {
+    public void checkOrderMessage() {
         String orderMessage = thanksOrder.getText();
-        if (orderMessage=="Thank you for your order!"){
-            return true;
-        }
-        else return false;
+        assertThat(orderMessage, is("Thank you for your order!"));
     }
 }

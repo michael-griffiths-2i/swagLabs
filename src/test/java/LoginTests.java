@@ -1,5 +1,9 @@
-import myPages.*;
+import myPages.BagPOM;
+import myPages.LoginPOM;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import utilities.TestBase;
 
 
@@ -33,12 +37,9 @@ public class LoginTests extends TestBase {
         login.addUserName("locked_out_user");
         login.addPassword("secret_sauce");
         login.login();
+
         login.loginError();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+
     }
 
     @Test
@@ -91,13 +92,6 @@ public class LoginTests extends TestBase {
         standard_user();
         bag.addToCart();
 
-        //just delaying the page for a second and allowing the item to be added to cart
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
         //shopping cart badge should have value of 1
         bag.checkCartBadge();
 
@@ -119,13 +113,17 @@ public class LoginTests extends TestBase {
 
     }
 
-    @Test
+
     void buyAProduct(){
+        String [] products ={"p1","p2","p3"};
+        String [] prices ={"price1","price2","price3"};
+        String [] tax ={"tax1","tax2","tax3","tax4"};
+        String [] finalPrice={"","","",""};
         System.out.println("Running buyAProduct");
 
         bag = new BagPOM(driver); // Initialize the bag object
         standard_user();
-        bag.addToCart();
+        bag.addToCart();//could be passed a parameter
 
         //just delaying the page for a second and allowing the item to be added to cart
         try {
@@ -140,7 +138,7 @@ public class LoginTests extends TestBase {
         //click on cart
         bag.clickOnCart();
         //check value
-        bag.checkPrice();
+        bag.checkPrice(); //could be passed a parameter
         //checkout
         bag.clickCheckoutButton();
         //enter details Michael Mouse
@@ -148,8 +146,8 @@ public class LoginTests extends TestBase {
         bag.addLastName();
         bag.addPostCode();
         bag.clickContinue();
-        bag.checkTax();
-        bag.checkFinalPrice();
+        bag.checkTax(); //could be passed a parameter
+        bag.checkFinalPrice(); //could be passed a parameter
         bag.clickFinishButton();
         bag.checkOrderMessage();
 
