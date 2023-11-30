@@ -1,13 +1,10 @@
 import myPages.BagPOM;
 import myPages.LoginPOM;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import utilities.TestBase;
 
 
-public class LoginTests extends TestBase {
+public class LoginTest extends TestBase {
 
     private LoginPOM login;// 'login' is a map of the shopping bag page.
     private BagPOM bag; // 'bag' is a map of the shopping bag page.

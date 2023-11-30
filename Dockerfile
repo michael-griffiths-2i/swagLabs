@@ -1,15 +1,18 @@
-# Choose base
-FROM zenika/alpine-maven
+# Use maven:3.8.4-openjdk-17-slim as build environment
+FROM maven:3.8.4-openjdk-17-slim as build
+WORKDIR /app
+# Copy pom.xml and source code to the container
+COPY ./pom.xml ./pom.xml
+COPY ./src ./src
+# Run the tests
+RUN mvn -Dtest=LoginTest test -X
+# Package the application
+RUN mvn package -DskipTests -X
 
-# Install the pre-requisites
-RUN apk update && apk add ca-certificates wget && update-ca-certificates
+# Use openjdk:17-jdk-slim for the runtime environment
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+# Copy the JAR file from the build stage
+COPY --from=build /app/target/test-1.0-SNAPSHOT.jar app.jar
 
-# Install Maven and set the env variables
-RUN apk add vim
-RUN mvn archetype:generate -B -D archetypeGroupId=net.alchim31.maven -D archetypeArtifactId=seleniumDemo -D archetypeVersion=1.7 -D groupId=com.myproject -D artifactId=seleniumDemo -D version=0.1-SNAPSHOT -D package=com.scalascrape
-# Set the working directory
-WORKDIR /usr/src/app/MyProject
-
-# Copy your project to Docker
-RUN rm pom.xml
-COPY pom.xml .
+ENTRYPOINT ["java","-jar","app.jar"]
